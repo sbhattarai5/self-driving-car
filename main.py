@@ -2,54 +2,38 @@ import sys
 import random; random.seed()
 import pygame
 from init import *
-
-
-# dividers height 40, space 40
-
-x = road_rect.x + road_rect.w/2 - divider_width / 2
-dividers = [pygame.Rect(x, i, DIVIDER_WIDTH, DIVIDER_HEIGHT) for i in range(-(DIVIDER_HEIGHT + DIVIDER_SPACING), 1000, DIVIDER_HEIGHT + DIVIDER_SPACING)]
+from road import *
+from vehicle import *
+from clock import *
 
 car_x = road_rect[0] + LANE_WIDTH/2
 car_y = 450
-car_dy = 0.0
+car_dx = 0
+car_dy = 1
 
 audi_x = road_rect[0] + 3 * LANE_WIDTH/2
 audi_y = 500
+audi_dx = 0
 audi_dy = -0.2
 audi_angle = 0
 
-
-dy = 1
-
-def draw(surface, image, cx, cy, draw_bounding_box=True, draw_larger_bounding_box=False):
-    # The cx,cy is center of rect for blit
-    w, h = image.get_size()
-    x = cx - w/2
-    y = cy - h/2
-    surface.blit(image, (x, y))
-    # draw bounding box
-    if draw_bounding_box:
-        rect = image.get_rect()
-        rect.x = x
-        rect.y = y
-        pygame.draw.rect(surface, RED, rect, 1)
-    # draw tighter bounding box
-    if draw_larger_bounding_box:
-        rect.x = x - 20
-        rect.y = y - 20
-        rect.w += 40
-        rect.h += 40
-        pygame.draw.rect(surface, RED, rect, 4)
+dy = 1  # check if I can comment this
 
 
 while 1:
 
     starttime = pygame.time.get_ticks()
+
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
 
+    ## maybe
+    # variables = [car_x, car_y, audi_dx, audi_dy]
+    # manipulate_key(keys, variables)
+    ##############
+    
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
         car_x -= 0.1
@@ -77,33 +61,25 @@ while 1:
     if r == 1:
         audi_dy += 0.05
     elif r == 2:
-        audi_dy -= 0.05        
-    audi_y += audi_dy
-    
-    surface.fill(GRASS_COLOR)
-    pygame.draw.rect(surface, ROAD_COLOR, road_rect)
-    for divider in dividers:
-        pygame.draw.rect(surface, DIVIDER_COLOR, divider)
+        audi_dy -= 0.05
+        
+    audi_x, audi_y = move_vehicle(audi_x, audi_y, audi_dx, audi_dy)
 
-    draw(surface, car_image, car_x, car_y)
-    draw(surface, audi_image, audi_x, audi_y)
-
-    # Test some images
-    draw(surface, mini_truck_image, 500, 200)
-    draw(surface, ambulance_image, 550, 200)
-    draw(surface, police_image, 600, 200)
-    draw(surface, taxi_image, 650, 200)
-    draw(surface, black_viper_image, 700, 200)
-    draw(surface, mini_van_image, 750, 200)
-    
-    time = round(pygame.time.get_ticks() / 1000.0, 2)
-    time = "Time (secs): " + str(time)
-    time = FONT48.render(time, True, WHITE)
-    surface.blit(time, (1000, 0))
-    
+    # drawing
+    draw_grass()
+    draw_road()
+    draw_vehicle(car_image, car_x, car_y)
+    draw_vehicle(audi_image, audi_x, audi_y)
+    draw_vehicle(mini_truck_image, 500, 200)
+    draw_vehicle(ambulance_image, 550, 200)
+    draw_vehicle(police_image, 600, 200)
+    draw_vehicle(taxi_image, 650, 200)
+    draw_vehicle(black_viper_image, 700, 200)
+    draw_vehicle(mini_van_image, 750, 200)
+    draw_clock()
     pygame.display.flip()
-
-    endtime = pygame.time.get_ticks()
-    delay  = int(MILLISEC_PER_FRAME - (endtime - starttime))
+    
+    # delaying
+    delay = get_delay(starttime)
     if delay > 0:
         pygame.time.delay(delay)
