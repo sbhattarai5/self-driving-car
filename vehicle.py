@@ -183,15 +183,10 @@ class VehicleModel:
         if self.target_dy < self.dy:
             self.dy -= self.ddy * delta_t
 
-        # move
-        self.dy = 2
-
         self.x += self.dx * delta_t
         self.y += self.dy * delta_t
 
         self.last_time = current_time
-
-        print(self.dy)
 
     def set_accelaration(self, ddx, ddy):
         self.ddx = ddx
