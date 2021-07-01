@@ -2,7 +2,6 @@ from init import *
 
 
 class Halter:
-
     def __init__(self):
         pass
 
@@ -10,4 +9,3 @@ class Halter:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-            

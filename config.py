@@ -10,8 +10,8 @@ PIXEL = 22.64
 
 CAPTION = "CISS450: self driving car"
 FRAME_RATE = 30.0
-MILLISEC_PER_FRAME = 1000.0/FRAME_RATE
-#SIZE = (44, 35)
+MILLISEC_PER_FRAME = 1000.0 / FRAME_RATE
+# SIZE = (44, 35)
 SIZE = (1000, 800)
 RED = (255, 0, 0)
 WHITE = (255, 255, 255)
@@ -33,11 +33,11 @@ ROAD_Y = 20
 NUM_LANES = 6
 LANE_WIDTH = 3.66
 ROAD_HEIGHT = WORLD_H
-ROAD_END = ROAD_X +(LANE_WIDTH * NUM_LANES)
+ROAD_END = ROAD_X + (LANE_WIDTH * NUM_LANES)
 ## dividers
 
 divider_width = 0.65
-#DIVIDER_WIDTH = LANE_WIDTH/15
+# DIVIDER_WIDTH = LANE_WIDTH/15
 DIVIDER_WIDTH = 0.65
 DIVIDER_HEIGHT = 1
 DIVIDER_SPACING = 3
@@ -47,14 +47,14 @@ ROAD_COLOR = (20, 20, 20)
 
 ## images
 
-car_image = pygame.image.load('images/small/Black_viper/Black_viper.png')
-audi_image = pygame.image.load('images/small/Audi/Audi.png')
-mini_truck_image = pygame.image.load('images/small/Mini_truck/Mini_truck.png')
-ambulance_image = pygame.image.load('images/small/Ambulance/Ambulance.png')
-police_image = pygame.image.load('images/small/Police/Police.png')
-taxi_image = pygame.image.load('images/small/taxi/taxi.png')
-mini_van_image = pygame.image.load('images/small/Mini_van/Mini_van.png')
-black_viper_image = pygame.image.load('images/small/Black_viper/Black_viper.png')
+car_image = pygame.image.load("images/small/Black_viper/Black_viper.png")
+audi_image = pygame.image.load("images/small/Audi/Audi.png")
+mini_truck_image = pygame.image.load("images/small/Mini_truck/Mini_truck.png")
+ambulance_image = pygame.image.load("images/small/Ambulance/Ambulance.png")
+police_image = pygame.image.load("images/small/Police/Police.png")
+taxi_image = pygame.image.load("images/small/taxi/taxi.png")
+mini_van_image = pygame.image.load("images/small/Mini_van/Mini_van.png")
+black_viper_image = pygame.image.load("images/small/Black_viper/Black_viper.png")
 
-#Sensor Info
+# Sensor Info
 MAX_RADIUS = 4
