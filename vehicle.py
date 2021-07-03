@@ -111,13 +111,19 @@ class VehicleModel:
         image,
         x,
         y,
+        position,
         dx,
         dy,
+        speed,
         ddx,
         ddy,
+        accelaration,
         target_dx,
         target_dy,
+        target_speed,
+        max_dx,
         max_dy,
+        max_speed,
         angle,
         car_type,
         draw_bounding_box=False,
@@ -126,13 +132,19 @@ class VehicleModel:
         self.image = image
         self.x = x
         self.y = y
+        self.position = position
         self.dx = dx
         self.dy = dy
+        self.speed = speed
         self.ddx = ddx
         self.ddy = ddy
+        self.accelaration = accelaration
         self.target_dx = target_dx
         self.target_dy = target_dy
+        self.target_speed = target_speed
+        self.max_dx = max_dx
         self.max_dy = max_dy
+        self.max_speed = max_speed
         self.accn_depression = 0.0
         self.w, self.h = image.get_size()
         self.sensor = Sensor(self.w, self.h)
@@ -206,14 +218,14 @@ class VehicleControlUser:
             self.vehiclemodel.move_instantly(0.1, 0)
         elif keys[pygame.K_UP]:
             self.vehiclemodel.accn_depression = max(
-                self.vehiclemodel.accn_depression + 0.1, 1.0
+                self.vehiclemodel.accn_depression + 0.01, 1.0
             )
         elif keys[pygame.K_DOWN]:
-            pass
+            self.vehiclemodel.accn_depression = min(
+                self.vehiclemodel.accn_depression - 0.01, 0.0
+            )
         elif keys[pygame.K_r]:
             self.vehiclemodel.rotate()
-        else:
-            self.vehiclemodel.accn_depression = 0
         self.vehiclemodel.move()
 
 
