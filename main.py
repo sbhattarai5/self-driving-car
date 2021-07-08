@@ -1,14 +1,11 @@
 from factory import *
 
-carmodel, carcontrol, carview, audimodel, audicontrol, audiview, roadmodel, roadcontrol, roadview, viewwindow, halter, WorldObjects = (
+carmodel, carcontrol, carview, audimodel, audicontrol, audiview, roadmodel, roadcontrol, roadview, viewwindow, halter, WorldObjects, sensorView, clock = (
     factory()
 )
-count = 0
 while 1:
-    count = count + 1
 
-    starttime = pygame.time.get_ticks()
-
+    halter.update()
     halter.run()
 
     carcontrol.run()
@@ -21,18 +18,16 @@ while 1:
     draw_grass()
     roadview.run()
     carmodel.sensor.detectWorld(carmodel, WorldObjects)
+    sensorView.run()
     carview.run()
     audiview.run()
+
+    clock.run()
+
     pygame.display.flip()
 
     # create an object called FramerateControl. Replace the following codes with
     # frameratecontrol.run()
 
     # delaying
-    delay = get_delay(starttime)
-    if delay > 0:
-        pygame.time.delay(delay)
-
-    # print("Road: ", roadmodel.road_x, roadmodel.road_y, roadmodel.road_height)
-    # print("Car: ", carmodel.x, carmodel.y)
-    # temp = input("Enter something: ")
+    halter.delay()
