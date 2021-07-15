@@ -65,7 +65,7 @@ class RoadControl:
         if remainder <= self.road_model.divider_height:
             start_y = start_y - remainder
         else:  # space
-            start_y = start_y + (remainder - self.road_model.divider_height)
+            start_y = start_y - remainder
 
         start_y = int(start_y) - 17
         for i in range(1, NUM_LANES):
@@ -107,6 +107,10 @@ class RoadView:
     def __init__(self, road):
         self.road_model = road
 
+    def draw_grass(self):
+    surface = SingletonSurface.getInstance().surface
+    surface.fill(GRASS_COLOR)
+
     def run(self):
         surface = SingletonSurface.getInstance().surface
         viewwindow = SingletonViewWindow.get_instance()
@@ -118,6 +122,8 @@ class RoadView:
         )
         pygame.draw.rect(surface, self.road_model.road_color, vrect)
 
+        self.draw_grass()
+        
         for divider in self.road_model.dividers:
             r = viewwindow.transform_rect(
                 divider[0], divider[1], divider[2], divider[3]
