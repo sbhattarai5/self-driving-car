@@ -9,6 +9,13 @@ from viewwindow import *
 from road import *
 from time import time
 
+
+def get_center(obj):
+    x = obj.x - (obj.w /(PIXEL))/ 2
+    y = obj.y - (obj.h / PIXEL)/2
+    return x, y
+
+
 # Sensor Class for the Car
 class Sensor:
     def __init__(self, w, h):
@@ -18,85 +25,75 @@ class Sensor:
         surface = SingletonSurface.getInstance().surface
 
     def get_distance(self, audi, obj):
-        viewwindow = SingletonViewWindow.get_instance()
-        # audi_x, audi_y = viewwindow.transform(audi.x, audi.y)
-        if isinstance(obj, VehicleModel):
-            return math.sqrt(abs((pow(audi.x - obj.x, 2) + pow(audi.y - obj.y, 2))))
-        else:
-            return math.sqrt(abs((pow(audi.x - obj[0], 2) + pow(audi.y - obj[1], 2))))
-
-    def detectWorld(self, audi, WorldObjects):
+        x1, y1 = get_center(audi)
+        x2, y2 = get_center(obj)
+        return(math.sqrt(abs((pow(x1 - x2, 2) +
+                              pow(y1 - y2, 2)))))
+    
+    def detectWorld(self,audi, WorldObjects):
         viewwindow = SingletonViewWindow.get_instance()
         surface = SingletonSurface.getInstance().surface
-        # USEFUL CONSTANTS FOR COMPUTATION
-        # road_end = viewwindow.transform(ROAD_END, 0)
-        # road_x = viewwindow.transform(ROAD_X, 0)
-        x, y = viewwindow.transform(audi.x, audi.y)
-        nearby_objects = []
-
+        nearby_objects =[]
+        self.nearbyObjects = []
+        
         #############################################################
-        # Detects the grass for the audi
+        #Detects the grass for the audi
         if audi.x < ROAD_X + (LANE_WIDTH):
-            # Detects the Grass on the Left
+            #Detects the Grass on the Left
             nearby_objects.append(("GRASS", ROAD_X, audi.y))
-            rect = viewwindow.transform_rect(
-                ROAD_X, audi.y - (audi.h / PIXEL), 1 / PIXEL, audi.h / PIXEL
-            )
-            pygame.draw.rect(surface, RED, rect, 1)
-
+            self.nearbyObjects.append((ROAD_X, audi.y-(audi.h/PIXEL), 1/PIXEL, audi.h/PIXEL))
+           
         if audi.x > ROAD_X + (LANE_WIDTH * (NUM_LANES - 1)):
-            # Detects the Grass on the Right when in range
-            nearby_objects.append(("GRASS", ROAD_X + (LANE_WIDTH * NUM_LANES), audi.y))
-            rect = viewwindow.transform_rect(
-                ROAD_X + LANE_WIDTH * NUM_LANES,
-                audi.y - (audi.h / PIXEL),
-                1 / PIXEL,
-                audi.h / PIXEL,
-            )
-            pygame.draw.rect(surface, RED, rect, 1)
-
-        # If the car is in the grass, end the sim
+            #Detects the Grass on the Right when in range
+            nearby_objects.append(("GRASS", ROAD_X +(LANE_WIDTH  * NUM_LANES), audi.y ))
+            self.nearbyObjects.append((ROAD_X +(LANE_WIDTH * NUM_LANES), audi.y-(audi.h/PIXEL), 1/PIXEL, audi.h/PIXEL))
+            
+        
         if audi.x < ROAD_X or audi.x > ROAD_END:
-            print("ON GRASS")
-            sys.exit()
-        ################################################
+            print("<Car,", round(audi.x),", ", round(audi.y),
+                  ", ", audi.w, ", ", audi.h, "> collides with GRASS")
+            nearby_objects.append(("GRASS", ROAD_X, audi.y, True))
+            #sys.exit()
+        
         #########################################################################################
-        # This now senses the other objects in the world and adds them to the nearby objects list
+        #This now senses the other objects in the world and adds them to the nearby objects list
         for obj in WorldObjects:
-            # Computes the distance
+            #Try to move the if-else using inheritance.
+            #Computes the distance
+           
             if isinstance(obj, VehicleModel):
-                if (
-                    self.get_distance(audi, obj) < MAX_RADIUS
-                    and self.get_distance(audi, obj) > 0
-                ):
-                    # Sensor code for cars
-                    obj.draw_bounding_box = True
-                    # print(obj.draw_bounding_box)
-                    rect = (obj.x, obj.y, obj.w / PIXEL, obj.h / PIXEL)
-
-                    mrect = (audi.x, audi.y, audi.w / PIXEL, audi.h / PIXEL)
-                    # Write own function for this TO_DO
+                 if self.get_distance(audi, obj) < MAX_RADIUS and self.get_distance(audi, obj) > 0:
+                    #Sensor code for cars
+                    rect = (obj.x, obj.y, obj.w/PIXEL, obj.h/PIXEL)
+                    mrect = (audi.x, audi.y, audi.w/PIXEL, audi.h/PIXEL)
                     if colliderect(mrect, rect):
-                        # print("Collided, Stop Sim")
-                        # This works now. If two cars collide, it stops the sim
-                        sys.exit()
-                    # Adds the car object to sensed list
-                    nearby_objects.append(("CAR", obj.x, obj.y))
-                else:
-                    obj.draw_bounding_box = False
-            # World Objects will have roadmodel in it instead of list of dividers
+                        
+                        #Return label and rectangle of object and let the sim decide if it needs to stop
+                        nearby_objects.append(("CAR", obj.x, obj.y, True))
+                        print("<Car,", round(audi.x),", ", round(audi.y),
+                  ", ", audi.w, ", ", audi.h, "> collides with CAR")
+                        #sys.exit()
+                        
+                    #Adds the car object to sensed list
+                    self.nearbyObjects.append((obj.x, obj.y - obj.h/(PIXEL), obj.w/PIXEL, obj.h/PIXEL))
+                    nearby_objects.append(("CAR", obj.x, obj.y, False))
+                
             elif isinstance(obj, RoadModel):
                 for div in obj.dividers:
-                    if abs(div[0] - audi.x) > MAX_RADIUS:
-                        continue
-                    else:
-                        if self.get_distance(audi, div) < MAX_RADIUS:
-                            x, y = div[0], div[1]
-                            nearby_objects.append(("DIVIDER", div[0], div[1]))
-                            rect = viewwindow.transform_rect(x, y, div[2], div[3])
-                            pygame.draw.rect(surface, RED, rect, 5)
+                    if self.get_distance(audi, div) <= MAX_RADIUS:
+                        self.nearbyObjects.append((div.x, div.y, div.w, div.h))
+####
+    
+class SensorView:
+    def __init__(self, Sensor):
+        self.sensor = Sensor
 
-        #############################################################################
+    def run(self):
+        surface = SingletonSurface.getInstance().surface
+        viewwindow = SingletonViewWindow.get_instance()
+        for obj in self.sensor.nearbyObjects:
+            rect = viewwindow.transform_rect(obj[0], obj[1], obj[2], obj[3])
+            pygame.draw.rect(surface, RED, rect, 2)
 
 
 
@@ -115,8 +112,6 @@ class VehicleModel:
         max_dy,
         angle,
         car_type,
-        draw_bounding_box=False,
-        draw_larger_bounding_box=False,
     ):
         self.image = image
         self.x = x
@@ -133,8 +128,6 @@ class VehicleModel:
         self.sensor = Sensor(self.w, self.h)
         self.angle = angle
         self.car_type = car_type
-        self.draw_bounding_box = draw_bounding_box
-        self.draw_larger_bounding_box = draw_larger_bounding_box
         self.last_time = time()
 
     def run(self):
@@ -240,15 +233,3 @@ class VehicleView:
         surface.blit(self.vehiclemodel.image, (x, y))
         # draw bounding box
 
-        if self.vehiclemodel.draw_bounding_box:
-            rect = self.vehiclemodel.image.get_rect()
-            rect.x = x
-            rect.y = y
-            pygame.draw.rect(surface, RED, rect, 1)
-        # draw tighter bounding box
-        if self.vehiclemodel.draw_larger_bounding_box:
-            rect.x = x - 20
-            rect.y = y - 20
-            rect.w += 40
-            rect.h += 40
-            pygame.draw.rect(surface, RED, rect, 4)

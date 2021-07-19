@@ -1,7 +1,3 @@
-"""
-   The configuration of the simulation
-"""
-
 import pygame, sys
 
 PIXEL = 22.64
@@ -39,8 +35,8 @@ ROAD_END = ROAD_X + (LANE_WIDTH * NUM_LANES)
 divider_width = 0.65
 # DIVIDER_WIDTH = LANE_WIDTH/15
 DIVIDER_WIDTH = 0.65
-DIVIDER_HEIGHT = 1
-DIVIDER_SPACING = 3
+DIVIDER_HEIGHT = 2
+DIVIDER_SPACING = 1
 DIVIDER_COLOR = (240, 240, 240)
 ROAD_COLOR = (20, 20, 20)
 

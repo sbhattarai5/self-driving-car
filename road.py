@@ -2,6 +2,7 @@ from init import *
 from surface import *
 from helper_functions import *
 from viewwindow import *
+from divider import *
 
 
 class RoadModel:
@@ -76,12 +77,7 @@ class RoadControl:
                 start_y + 37,
                 self.road_model.divider_height + self.road_model.divider_spacing,
             ):
-                r = (
-                    x,
-                    y,
-                    self.road_model.DIVIDER_WIDTH,
-                    self.road_model.divider_height,
-                )
+                r = divider(x, y)
                 self.road_model.dividers.append(r)
 
     def runRoad(self):
@@ -125,7 +121,4 @@ class RoadView:
         self.draw_grass()
         
         for divider in self.road_model.dividers:
-            r = viewwindow.transform_rect(
-                divider[0], divider[1], divider[2], divider[3]
-            )
-            pygame.draw.rect(surface, self.road_model.divider_color, r)
+            divider.draw()
