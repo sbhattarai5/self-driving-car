@@ -104,8 +104,8 @@ class RoadView:
         self.road_model = road
 
     def draw_grass(self):
-    surface = SingletonSurface.getInstance().surface
-    surface.fill(GRASS_COLOR)
+        surface = SingletonSurface.getInstance().surface
+        surface.fill(GRASS_COLOR)
 
     def run(self):
         surface = SingletonSurface.getInstance().surface
@@ -116,9 +116,7 @@ class RoadView:
             self.road_model.road[2],
             self.road_model.road[3],
         )
-        pygame.draw.rect(surface, self.road_model.road_color, vrect)
-
         self.draw_grass()
-        
+        pygame.draw.rect(surface, self.road_model.road_color, vrect)
         for divider in self.road_model.dividers:
             divider.draw()
