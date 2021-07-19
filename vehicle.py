@@ -101,84 +101,62 @@ class VehicleModel:
     def __init__(
         self,
         image,
-        x,
-        y,
-        dx,
-        dy,
-        ddx,
-        ddy,
-        target_dx,
-        target_dy,
-        max_dy,
-        angle,
+        position,
+        speed,
+        accelaration,
+        target_speed,
+        max_speed,
         car_type,
     ):
         self.image = image
-        self.x = x
-        self.y = y
-        self.dx = dx
-        self.dy = dy
-        self.ddx = ddx
-        self.ddy = ddy
-        self.target_dx = target_dx
-        self.target_dy = target_dy
-        self.max_dy = max_dy
-        self.accn_depression = 0.0
+        self.position = position
+        self.speed = speed
+        self.accelaration = accelaration
+        self.target_speed = target_speed
+        self.max_speed = max_speed
+        self.accelaration_depression = 0.0
         self.w, self.h = image.get_size()
         self.sensor = Sensor(self.w, self.h)
-        self.angle = angle
         self.car_type = car_type
         self.last_time = time()
+
+    def get_x(self):
+        return self.position[0]
+
+    def set_x(self, x):
+        self.position[0] = x
+
+    def get_y(self):
+        return self.position[1]
+
+    def set_y(self, y):
+        self.position[1] = y
+
+    x = property(get_x, set_x)
+    y = property(get_y, set_y)
 
     def run(self):
         raise NotImplementedError
 
-    def move_instantly(self, dx=None, dy=None):
-        if dx == None:
-            dx = self.dx
-        if dy == None:
-            dy = self.dy
-        self.x += dx
-        self.y += dy
-
-    def change_accelaration(self, dddx, dddy):
-        self.ddx += dddx
-        self.ddy += dddy
-
-    def change_velocity(self, ddx, ddy):
-        self.dx += ddx
-        self.dy += ddy
-
-    def rotate(self):
-        self.angle = (self.angle + 10) % 360
-        self.image = pygame.image.load(
-            "images/small/"
-            + self.car_type
-            + "/"
-            + self.car_type
-            + "-%s.png" % self.angle
-        )
+    def move_instantly(self, vect):
+        self.position += vect
 
     def move(self):
-        # change velocity
-        self.target_dy = self.accn_depression * self.max_dy
-
+        target_speed = self.accelaration_depression * self.max_speed
         current_time = time()
         delta_t = current_time - self.last_time
 
-        if self.target_dy > self.dy:
-            self.dy += self.ddy * delta_t
-        if self.target_dy < self.dy:
-            self.dy -= self.ddy * delta_t
+        if target_speed[1] > self.speed[1]:
+            self.speed += self.accelaration * delta_t
+        elif target_speed[1] < self.speed[1]:
+            self.speed -= self.accelaration * delta_t
 
-        self.x += self.dx * delta_t
-        self.y += self.dy * delta_t
-
+        self.position += self.speed * delta_t
+        self.x, self.y = self.position
         self.last_time = current_time
 
-    def set_accelaration(self, ddx, ddy):
-        self.ddx = ddx
-        self.ddy = ddy
+    def set_accelaration_depression(self, accelaration_depression):
+        self.accelaration_depression = accelaration_depression
 
 
 class VehicleControlUser:
@@ -189,19 +167,17 @@ class VehicleControlUser:
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_LEFT]:
-            self.vehiclemodel.move_instantly(-0.1, 0)
+            self.vehiclemodel.move_instantly((-0.1, 0))
         elif keys[pygame.K_RIGHT]:
-            self.vehiclemodel.move_instantly(0.1, 0)
+            self.vehiclemodel.move_instantly((0.1, 0))
         elif keys[pygame.K_UP]:
-            self.vehiclemodel.accn_depression = max(
-                self.vehiclemodel.accn_depression + 0.1, 1.0
+            self.vehiclemodel.accelaration_depression = max(
+                self.vehiclemodel.accelaration_depression + 0.01, 1.0
             )
         elif keys[pygame.K_DOWN]:
-            pass
-        elif keys[pygame.K_r]:
-            self.vehiclemodel.rotate()
-        else:
-            self.vehiclemodel.accn_depression = 0
+            self.vehiclemodel.accelaration_depression = min(
+                self.vehiclemodel.accelaration_depression - 0.01, 0.0
+            )
         self.vehiclemodel.move()
 
 
@@ -212,10 +188,14 @@ class VehicleControlRandom:
     def run(self):
         r = random.randrange(40)
         if r == 1:
-            self.vehiclemodel.change_velocity(0, 0.1)
+            self.vehiclemodel.set_accelaration_depression(
+                self.vehiclemodel.accelaration_depression + 0.1
+            )
         elif r == 2:
-            self.vehiclemodel.change_velocity(0, -0.1)
-        self.vehiclemodel.move_instantly()
+            self.vehiclemodel.set_accelaration_depression(
+                self.vehiclemodel.accelaration_depression - 0.1
+            )
+        self.vehiclemodel.move()
 
 
 class VehicleView:
@@ -223,12 +203,10 @@ class VehicleView:
         self.vehiclemodel = vehiclemodel
 
     def run(self):
-        x = self.vehiclemodel.x
-        y = self.vehiclemodel.y
+        x, y = self.vehiclemodel.position
         surface = SingletonSurface.getInstance().surface
         viewwindow = SingletonViewWindow.get_instance()
         x, y = viewwindow.transform(x, y)
-        # print(x, y)
 
         surface.blit(self.vehiclemodel.image, (x, y))
         # draw bounding box
