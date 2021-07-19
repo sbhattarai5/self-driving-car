@@ -15,7 +15,6 @@ while 1:
 
     ########################################
 
-    draw_grass()
     roadview.run()
     carmodel.sensor.detectWorld(carmodel, WorldObjects)
     sensorView.run()

@@ -98,5 +98,5 @@ def factory():
         halter,
         WorldObjects,
         sensorView,
-        clock
+        clock,
     )

@@ -1,8 +1,8 @@
 from init import *
 from helper_functions import *
 
-class Halter:
 
+class Halter:
     def __init__(self):
         self.starttime = pygame.time.get_ticks()
 
