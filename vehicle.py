@@ -99,11 +99,6 @@ class Sensor:
         #############################################################################
 
 
-## road.py
-def draw_grass():
-    surface = SingletonSurface.getInstance().surface
-    surface.fill(GRASS_COLOR)
-
 
 class VehicleModel:
     def __init__(
