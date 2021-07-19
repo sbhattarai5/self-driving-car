@@ -50,44 +50,22 @@ def factory():
 
     carmodel = VehicleModel(
         car_image,
-        car_x,
-        car_y,
         car_position,
-        car_dx,
-        car_dy,
         car_speed,
-        car_ddx,
-        car_ddy,
         car_accelaration,
-        car_target_dx,
-        car_target_dy,
         car_target_speed,
-        car_max_dx,
-        car_max_dy,
         car_max_speed,
-        car_angle,
         "Black_viper",
     )
     carcontrol = VehicleControlUser(carmodel)
     carview = VehicleView(carmodel)
     audimodel = VehicleModel(
         audi_image,
-        audi_x,
-        audi_y,
         audi_position,
-        audi_dx,
-        audi_dy,
         audi_speed,
-        audi_ddx,
-        audi_ddy,
         audi_accelaration,
-        audi_target_dx,
-        audi_target_dy,
         audi_target_speed,
-        audi_max_dx,
-        audi_max_dy,
         audi_max_speed,
-        audi_angle,
         "Audi",
     )
     audicontrol = VehicleControlRandom(audimodel)
