@@ -17,7 +17,7 @@ class Sensor:
     def __init__(self, w, h):
         self.w = w
         self.h = h
-        # self.rect = pygame.Rect(x, y, w, h)
+        self.nearbyObjects = []
         surface = SingletonSurface.getInstance().surface
 
     def get_distance(self, audi, obj):
@@ -29,7 +29,6 @@ class Sensor:
     def detectWorld(self,audi, WorldObjects):
         viewwindow = SingletonViewWindow.get_instance()
         surface = SingletonSurface.getInstance().surface
-        nearby_objects =[]
         self.nearbyObjects = []
         
         #############################################################
@@ -69,7 +68,7 @@ class Sensor:
                     if colliderect(mrect, rect) == False:
                      #Adds the car object to sensed list
                         self.nearbyObjects.append(("CAR",obj.x, obj.y - obj.h/(PIXEL), obj.w/PIXEL, obj.h/PIXEL, False))
-                    nearby_objects.append(("CAR", obj.x, obj.y, False))
+                    
                 
             elif isinstance(obj, RoadModel):
                 for div in obj.dividers:

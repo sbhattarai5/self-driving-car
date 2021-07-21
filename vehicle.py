@@ -130,3 +130,5 @@ class VehicleView:
         x, y = viewwindow.transform(x, y)
 
         surface.blit(self.vehiclemodel.image, (x, y))
+        if self.sensorView != None:
+            self.sensorView.run()

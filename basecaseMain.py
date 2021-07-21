@@ -1,7 +1,7 @@
 from basecaseFactory import *
 
 
-carmodel, carcontrol, carview, audimodel, audicontrol, audiview, roadmodel, roadcontrol, roadview, viewwindow, halter, WorldObjects, sensorView, clock = (
+carmodel, carcontrol, carview, audimodel, audicontrol, audiview, roadmodel, roadcontrol, roadview, viewwindow, halter, WorldObjects, clock = (
     factory()
 )
 while 1:
@@ -18,7 +18,6 @@ while 1:
 
     roadview.run()
     carmodel.sensor.detectWorld(carmodel, WorldObjects)
-    sensorView.run()
     carview.run()
     audiview.run()
 

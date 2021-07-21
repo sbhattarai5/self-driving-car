@@ -78,7 +78,6 @@ def factory():
     WorldObjects.append(roadmodel)
     roadcontrol = RoadControl(roadmodel)
     roadview = RoadView(roadmodel)
-    sensorView = SensorView(carmodel.sensor)
     halter = Halter()
     clock = create_clock()
     return (
@@ -94,6 +93,5 @@ def factory():
         viewwindow,
         halter,
         WorldObjects,
-        sensorView,
         clock,
     )
