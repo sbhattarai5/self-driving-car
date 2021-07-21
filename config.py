@@ -1,3 +1,4 @@
+#1
 import pygame, sys
 
 PIXEL = 22.64
@@ -53,4 +54,4 @@ mini_van_image = pygame.image.load("images/small/Mini_van/Mini_van.png")
 black_viper_image = pygame.image.load("images/small/Black_viper/Black_viper.png")
 
 # Sensor Info
-MAX_RADIUS = 4
+MAX_RADIUS = 5
