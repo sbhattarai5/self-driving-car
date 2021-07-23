@@ -53,7 +53,7 @@ def factory():
         car_target_speed,
         car_max_speed,
         "Black_viper",
-        True
+        True,
     )
     carcontrol = VehicleControlUser(carmodel)
     carview = VehicleView(carmodel)

@@ -1,4 +1,4 @@
-#1
+# 1
 import pygame, sys
 
 PIXEL = 22.64

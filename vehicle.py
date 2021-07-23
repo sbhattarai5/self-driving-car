@@ -16,10 +16,17 @@ def get_center(obj):
     return x, y
 
 
-
 class VehicleModel:
     def __init__(
-            self, image, position, speed, accelaration, target_speed, max_speed, car_type, has_sensor = False
+        self,
+        image,
+        position,
+        speed,
+        accelaration,
+        target_speed,
+        max_speed,
+        car_type,
+        has_sensor=False,
     ):
         self.image = image
         self.position = position
@@ -75,7 +82,10 @@ class VehicleModel:
     def set_accelaration_depression(self, accelaration_depression):
         self.accelaration_depression = accelaration_depression
 
+
 from sensor import *
+
+
 class VehicleControlUser:
     def __init__(self, vehiclemodel):
         self.vehiclemodel = vehiclemodel
@@ -84,9 +94,11 @@ class VehicleControlUser:
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_LEFT]:
-            self.vehiclemodel.move_instantly((-0.1, 0))
+            if self.vehiclemodel.speed[1] != 0:
+                self.vehiclemodel.move_instantly((-0.1, 0))
         elif keys[pygame.K_RIGHT]:
-            self.vehiclemodel.move_instantly((0.1, 0))
+            if self.vehiclemodel.speed[1] != 0:
+                self.vehiclemodel.move_instantly((0.1, 0))
         elif keys[pygame.K_UP]:
             self.vehiclemodel.accelaration_depression = max(
                 self.vehiclemodel.accelaration_depression + 0.01, 1.0
