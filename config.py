@@ -54,4 +54,8 @@ mini_van_image = pygame.image.load("images/small/Mini_van/Mini_van.png")
 black_viper_image = pygame.image.load("images/small/Black_viper/Black_viper.png")
 
 # Sensor Info
+<<<<<<< Updated upstream
 MAX_RADIUS = 5
+=======
+MAX_RADIUS = 4.5
+>>>>>>> Stashed changes

@@ -28,7 +28,11 @@ def factory():
     car_max_speed = vect2(car_max_dx, car_max_dy)
     car_angle = 0
 
+<<<<<<< Updated upstream
     audi_x = car_x + 19.5
+=======
+    audi_x = car_x + LANE_WIDTH * (NUM_LANES - 1) + 1
+>>>>>>> Stashed changes
     audi_y = car_y
     audi_position = vect2(audi_x, audi_y)
     audi_dx = 0
@@ -78,6 +82,10 @@ def factory():
     WorldObjects.append(roadmodel)
     roadcontrol = RoadControl(roadmodel)
     roadview = RoadView(roadmodel)
+<<<<<<< Updated upstream
+=======
+    sensorView = SensorView(carmodel.sensor)
+>>>>>>> Stashed changes
     halter = Halter()
     clock = create_clock()
     return (
@@ -93,5 +101,9 @@ def factory():
         viewwindow,
         halter,
         WorldObjects,
+<<<<<<< Updated upstream
+=======
+        sensorView,
+>>>>>>> Stashed changes
         clock,
     )
