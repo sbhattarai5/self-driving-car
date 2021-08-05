@@ -18,7 +18,16 @@ class Sensor:
     def __init__(self, w, h):
         self.w = w
         self.h = h
+<<<<<<< Updated upstream
         self.nearbyObjects = []
+=======
+<<<<<<< Updated upstream
+=======
+        self.center_x, self.center_y = None, None
+        self.nearbyObjects = []
+>>>>>>> Stashed changes
+        # self.rect = pygame.Rect(x, y, w, h)
+>>>>>>> Stashed changes
         surface = SingletonSurface.getInstance().surface
 
     def get_distance(self, audi, obj):
@@ -29,8 +38,17 @@ class Sensor:
     def detectWorld(self, audi, WorldObjects):
         viewwindow = SingletonViewWindow.get_instance()
         surface = SingletonSurface.getInstance().surface
+<<<<<<< Updated upstream
         self.nearbyObjects = []
 
+=======
+<<<<<<< Updated upstream
+        nearby_objects =[]
+=======
+        self.center_x, self.center_y = get_center(audi)
+>>>>>>> Stashed changes
+        self.nearbyObjects = []
+>>>>>>> Stashed changes
         #############################################################
         # Detects the grass for the audi
         if audi.x < ROAD_X + (LANE_WIDTH):
@@ -38,9 +56,15 @@ class Sensor:
             self.nearbyObjects.append(
                 (
                     "GRASS",
+<<<<<<< Updated upstream
                     ROAD_X,
                     audi.y - (audi.h / PIXEL),
                     1 / PIXEL,
+=======
+                    ROAD_X - self.center_x,
+                    audi.y - (audi.h / PIXEL) - self.center_y,
+                    2 / PIXEL,
+>>>>>>> Stashed changes
                     audi.h / PIXEL,
                     False,
                 )
@@ -51,9 +75,15 @@ class Sensor:
             self.nearbyObjects.append(
                 (
                     "GRASS",
+<<<<<<< Updated upstream
                     ROAD_X + (LANE_WIDTH * NUM_LANES),
                     audi.y - (audi.h / PIXEL),
                     1 / PIXEL,
+=======
+                    ROAD_X + (LANE_WIDTH * NUM_LANES) - self.center_x,
+                    audi.y - (audi.h / PIXEL) - self.center_y,
+                    2 / PIXEL,
+>>>>>>> Stashed changes
                     audi.h / PIXEL,
                     False,
                 )
@@ -74,8 +104,13 @@ class Sensor:
             self.nearbyObjects.append(
                 (
                     "GRASS",
+<<<<<<< Updated upstream
                     audi.x,
                     audi.y - (audi.h / PIXEL),
+=======
+                    ROAD_X - self.center_x,
+                    audi.y - (audi.h / PIXEL) - self.center_y,
+>>>>>>> Stashed changes
                     1 / PIXEL,
                     audi.h / PIXEL,
                     True,
@@ -100,8 +135,13 @@ class Sensor:
                         self.nearbyObjects.append(
                             (
                                 "CAR",
+<<<<<<< Updated upstream
                                 obj.x,
                                 obj.y - obj.h / (PIXEL),
+=======
+                                obj.x - self.center_x,
+                                obj.y - obj.h / (PIXEL) - self.center_y,
+>>>>>>> Stashed changes
                                 obj.w / PIXEL,
                                 obj.h / PIXEL,
                                 True,
@@ -121,23 +161,54 @@ class Sensor:
                         )
                         # sys.exit()
                     if colliderect(mrect, rect) == False:
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+                     #Adds the car object to sensed list
+                        self.nearbyObjects.append(("CAR",obj.x, obj.y - obj.h/(PIXEL), obj.w/PIXEL, obj.h/PIXEL, False))
+                    nearby_objects.append(("CAR", obj.x, obj.y, False))
+                
+=======
+>>>>>>> Stashed changes
                         # Adds the car object to sensed list
                         self.nearbyObjects.append(
                             (
                                 "CAR",
+<<<<<<< Updated upstream
                                 obj.x,
                                 obj.y - obj.h / (PIXEL),
+=======
+                                obj.x - self.center_x,
+                                obj.y - obj.h / (PIXEL) - self.center_y,
+>>>>>>> Stashed changes
                                 obj.w / PIXEL,
                                 obj.h / PIXEL,
                                 False,
                             )
                         )
+<<<<<<< Updated upstream
 
+=======
+                    nearby_objects.append(("CAR", obj.x, obj.y, False))
+
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
             elif isinstance(obj, RoadModel):
                 for div in obj.dividers:
                     if self.get_distance(audi, div) <= MAX_RADIUS:
                         self.nearbyObjects.append(
+<<<<<<< Updated upstream
                             ("Divider", div.x, div.y, div.w, div.h, False)
+=======
+                            (
+                                "Divider",
+                                div.x - self.center_x,
+                                div.y - self.center_y,
+                                div.w,
+                                div.h,
+                                False,
+                            )
+>>>>>>> Stashed changes
                         )
 
 
@@ -152,5 +223,14 @@ class SensorView:
         surface = SingletonSurface.getInstance().surface
         viewwindow = SingletonViewWindow.get_instance()
         for obj in self.sensor.nearbyObjects:
+<<<<<<< Updated upstream
             rect = viewwindow.transform_rect(obj[1], obj[2], obj[3], obj[4])
+=======
+            rect = viewwindow.transform_rect(
+                obj[1] + self.sensor.center_x,
+                obj[2] + self.sensor.center_y,
+                obj[3],
+                obj[4],
+            )
+>>>>>>> Stashed changes
             pygame.draw.rect(surface, RED, rect, 2)

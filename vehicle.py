@@ -61,10 +61,17 @@ class VehicleModel:
 
     def run(self):
         raise NotImplementedError
+<<<<<<< Updated upstream
 
     def move_instantly(self, vect):
         self.position += vect
 
+=======
+
+    def move_instantly(self, vect):
+        self.position += vect
+
+>>>>>>> Stashed changes
     def move(self):
         target_speed = self.accelaration_depression * self.max_speed
         current_time = time()
@@ -90,15 +97,45 @@ class VehicleControlUser:
     def __init__(self, vehiclemodel):
         self.vehiclemodel = vehiclemodel
 
+    def keepCenter(self):
+        objects = self.vehiclemodel.sensor.nearbyObjects
+        x1, y1 = get_center(self.vehiclemodel)
+        leftDistance = MAX_RADIUS + 1
+        rightDistance = MAX_RADIUS
+        for obj in objects:
+            if obj[1] + obj[3] > self.vehiclemodel.x - x1 and not (obj[0] == "CAR"):
+                x2 = obj[1]
+                distance = math.sqrt(abs((pow(0 - x2, 2) + pow(y1 - y1, 2))))
+                if distance < leftDistance:
+                    leftDistance = distance
+
+            if obj[1] < self.vehiclemodel.x + (
+                self.vehiclemodel.w / PIXEL
+            ) - x1 and not (obj[0] == "CAR"):
+                x2 = obj[1] + obj[3]
+                distance = math.sqrt(abs((pow(0 - x2, 2) + pow(y1 - y1, 2))))
+                if distance < rightDistance:
+                    rightDistance = distance
+        if round(leftDistance, 2) < round(rightDistance, 2):
+            self.vehiclemodel.move_instantly((-0.01, 0))
+        elif round(leftDistance, 2) > round(rightDistance, 2):
+            self.vehiclemodel.move_instantly((0.01, 0))
+
     def run(self):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_LEFT]:
+<<<<<<< Updated upstream
             if self.vehiclemodel.speed[1] != 0:
                 self.vehiclemodel.move_instantly((-0.1, 0))
         elif keys[pygame.K_RIGHT]:
             if self.vehiclemodel.speed[1] != 0:
                 self.vehiclemodel.move_instantly((0.1, 0))
+=======
+            self.vehiclemodel.move_instantly((-0.1, 0))
+        elif keys[pygame.K_RIGHT]:
+            self.vehiclemodel.move_instantly((0.1, 0))
+>>>>>>> Stashed changes
         elif keys[pygame.K_UP]:
             self.vehiclemodel.accelaration_depression = max(
                 self.vehiclemodel.accelaration_depression + 0.01, 1.0
@@ -107,6 +144,10 @@ class VehicleControlUser:
             self.vehiclemodel.accelaration_depression = min(
                 self.vehiclemodel.accelaration_depression - 0.01, 0.0
             )
+<<<<<<< Updated upstream
+=======
+        self.keepCenter()
+>>>>>>> Stashed changes
         self.vehiclemodel.move()
 
 
@@ -141,6 +182,14 @@ class VehicleView:
         viewwindow = SingletonViewWindow.get_instance()
         x, y = viewwindow.transform(x, y)
 
-        surface.blit(self.vehiclemodel.image, (x, y))
+<<<<<<< Updated upstream
+=======
         if self.sensorView != None:
             self.sensorView.run()
+>>>>>>> Stashed changes
+        surface.blit(self.vehiclemodel.image, (x, y))
+<<<<<<< Updated upstream
+        if self.sensorView != None:
+            self.sensorView.run()
+=======
+>>>>>>> Stashed changes
